@@ -14,7 +14,8 @@ import org.json.JSONObject
 class MainAdapter(
     var context: Context?=null,
     var Arraylist: ArrayList<String>,
-    var Arraylist2: ArrayList<JSONObject>
+    var Arraylist2: ArrayList<JSONObject>,
+    var number: ArrayList<Int>
 
     ): RecyclerView.Adapter<MainAdapter.ViewHolder>() {
 
@@ -30,20 +31,28 @@ class MainAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemView.data.text = "\n ${Arraylist[position]} \n ${Arraylist2[position].getString("th")} \n ${Arraylist2[position].getString("en")}"
-
-
+        holder.itemView.data.text =
+                "${number[position]}\n ${Arraylist[position]} \n ${Arraylist2[position].getString("th")} \n ${Arraylist2[position].getString(
+                    "en"
+                )}"
+        if ((position+1)%2==0){
+            holder.itemView.img1.setImageDrawable(context?.getDrawable(R.drawable.ic_camera))
+        }else if((position+1)%2!=0){
+            holder.itemView.img1.setImageDrawable(context?.getDrawable(R.drawable.ic_old_fashion_briefcase))
+        }
         holder.itemView.setOnClickListener {
             val intent = Intent(context, NewMain::class.java)
-            intent.putExtra("title",Arraylist[position])
-            intent.putExtra("th",Arraylist2[position].getString("th"))
-            intent.putExtra("en",Arraylist2[position].getString("en"))
+            intent.putExtra("number", number[position])
+            intent.putExtra("title", Arraylist[position])
+            intent.putExtra("th", Arraylist2[position].getString("th"))
+            intent.putExtra("en", Arraylist2[position].getString("en"))
+            intent.putExtra("oov",position+1)
             context?.startActivity(intent)
+
 
         }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//        var Listview_1: ListView = itemView.findViewById(R.id.Listview_1)
     }
 }
